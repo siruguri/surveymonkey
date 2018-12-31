@@ -1,5 +1,7 @@
 require 'bundler/setup'
 require 'surveymonkey'
+require 'webmock/rspec'
+require 'support/webmock_stubs'
 
 RSpec.configure do |config|
     # Enable flags like --only-failures and --next-failure

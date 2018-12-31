@@ -21,6 +21,12 @@ module SurveyMonkeyApi
                 response = self.class.get("/v3/surveys/#{survey_id}/details", query: options)
                 response.parsed_response
             end
+
+            # Returns surveys's collectors
+            def collectors(survey_id, options = {})
+                response = self.class.get("/v3/surveys/#{survey_id}/collectors", query: options)
+                response.parsed_response
+            end            
         end
     end
 end

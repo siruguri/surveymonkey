@@ -13,10 +13,23 @@ module SurveyMonkeyApi
 
         base_uri 'https://api.surveymonkey.net'
         format :json
+        attr_accessor :access_token
 
         def initialize(_args = {})
-            access_token = ENV['SURVEY_MONKEY_TOKEN']
-            self.class.default_options.merge!(headers: { 'Authorization' => "Bearer #{access_token}", 'Content-Type' => 'application/json' })
+          access_token = ENV['SURVEY_MONKEY_TOKEN']
+          self.class.default_options.merge!(headers:
+                                              { 'Authorization' => "Bearer #{access_token}",
+                                                'Content-Type' => 'application/json' }
+                                           )
+        end
+
+        def token=(token)
+          @access_token = token
+          self.class.default_options.merge!(headers: { 'Authorization' => "Bearer #{token}", })
+        end
+
+        def token
+          access_token
         end
     end
 end

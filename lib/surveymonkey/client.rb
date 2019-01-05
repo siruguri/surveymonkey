@@ -1,6 +1,7 @@
 require 'httparty'
 require_relative 'client/users'
 require_relative 'client/surveys'
+require_relative 'client/pages'
 require_relative 'client/responses'
 
 module SurveyMonkeyApi

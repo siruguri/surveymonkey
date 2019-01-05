@@ -1,6 +1,11 @@
 module SurveyMonkeyApi
     class Client
-        # API endpoints for surveys resources
+      # API endpoints for surveys resources
+
+      attr_reader :pages
+      def initialize
+        @pages = []
+      end
         module Surveys
             # Returns list of surveys as array in ['data'] field
             # Each survey looks like
@@ -20,6 +25,20 @@ module SurveyMonkeyApi
             def survey_with_details(survey_id, options = {})
                 response = self.class.get("/v3/surveys/#{survey_id}/details", query: options)
                 response.parsed_response
+            end
+
+            # Returns surveys's pages
+            def pages(survey_id, options = {})
+                response = self.class.get("/v3/surveys/#{survey_id}/pages", query: options)
+                r = response.parsed_response
+                r['data'].each do |page_details|
+                  pages << Client::Page.new(survey_id, page_details['id'])
+                end
+                r
+            end            
+
+            def page_ids
+              pages.map { |p| p.page_id }
             end
 
             # Returns surveys's collectors

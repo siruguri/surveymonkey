@@ -2,9 +2,8 @@ module SurveyMonkeyApi
     class Client
       # API endpoints for surveys resources
 
-      attr_reader :pages
       def initialize
-        @pages = []
+        @_pages = nil
       end
         module Surveys
             # Returns list of surveys as array in ['data'] field
@@ -29,16 +28,17 @@ module SurveyMonkeyApi
 
             # Returns surveys's pages
             def pages(survey_id, options = {})
+              return @_pages if @_pages
+              @_pages = []
                 response = self.class.get("/v3/surveys/#{survey_id}/pages", query: options)
-                r = response.parsed_response
-                r['data'].each do |page_details|
-                  pages << Client::Page.new(survey_id, page_details['id'])
+                response.parsed_response['data'].each do |page_details|
+                  @_pages << Client::Page.new(survey_id, page_details['id'])
                 end
-                r
+                @_pages
             end            
 
-            def page_ids
-              pages.map { |p| p.page_id }
+            def page_ids(survey_id)
+              pages(survey_id).map { |p| p.page_id }
             end
 
             # Returns surveys's collectors

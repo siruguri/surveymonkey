@@ -32,7 +32,7 @@ module SurveyMonkeyApi
               @_pages = []
                 response = self.class.get("/v3/surveys/#{survey_id}/pages", query: options)
                 response.parsed_response['data'].each do |page_details|
-                  @_pages << Client::Page.new(survey_id, page_details['id'])
+                  @_pages << SurveyMonkeyApi::Page.new(survey_id, page_details['id'])
                 end
                 @_pages
             end            

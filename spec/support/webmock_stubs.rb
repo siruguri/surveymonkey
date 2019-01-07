@@ -1,4 +1,10 @@
 def webmock_stubs
+  stub_request(:get, "https://api.surveymonkey.net/v3/surveys/s_1234/pages").
+    with(
+      headers: {
+       	'Authorization'=>'Bearer thistoken'
+      }).
+    to_return(status: 200, body: pages_response)
   stub_request(:get, "https://api.surveymonkey.net/v3/surveys/1/collectors").
          with(
            headers: {
@@ -6,6 +12,64 @@ def webmock_stubs
        	  'Content-Type'=>'application/json'
            }).
          to_return(status: 200, body: collectors_response)
+  stub_request(:get, "https://api.surveymonkey.net/v3/surveys").
+         with(
+           headers: {
+       	  'Authorization'=>'Bearer thistoken'
+           }).
+         to_return(status: 200, body: surveys_response)
+end
+
+def pages_response
+  {"per_page": 50, "total": 100, 
+   "data": [{
+  "title": "Page Title 1",
+  "description": "page 1",
+  "position": 1,
+  "question_count": 1,
+  "id": "page_title_1",
+  "href":"http://api.surveymonkey.com/v3/surveys/1234/pages/page_title_1"
+            },
+{
+  "title": "Page Title 2",
+  "description": "page 2",
+  "position": 1,
+  "question_count": 2,
+  "id": "page_title_2",
+  "href":"http://api.surveymonkey.com/v3/surveys/1234/pages/page_title_2"
+            }           ]}.to_json
+end
+
+def surveys_response
+  {"per_page": 50, "total": 100, 
+   "data": [{
+  "title": "My Survey",
+  "nickname": "",
+  "category":"",
+  "language": "en",
+  "question_count": 10,
+  "page_count": 10,
+  "date_created": "2015-10-06T12:56:55",
+  "date_modified": "2015-10-06T12:56:55",
+  "id": "s_1234",
+  "href": "https://api.surveymonkey.com/v3/surveys/1234",
+  "buttons_text": {
+    "done_button": "Done",
+    "prev_button": "Prev",
+    "exit_button": "Exit",
+    "next_button": "Next"
+  },
+  "custom_variables": {
+    "name": "label"
+  },
+  "footer": true,
+  "folder_id":"1234",
+  "preview": "https://www.surveymonkey.com/r/Preview/",
+  "edit_url": "https://www.surveymonkey.com/create/",
+  "collect_url": "https://www.surveymonkey.com/collect/list",
+  "analyze_url": "https://www.surveymonkey.com/analyze/",
+  "summary_url": "https://www.surveymonkey.com/summary/"
+}]}.to_json
 end
 
 def collectors_response

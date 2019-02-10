@@ -41,6 +41,13 @@ module SurveyMonkeyApi
               pages(survey_id).map { |p| p.page_id }
             end
 
+            # Returns all of a survey's questions
+            def questions(survey_id)
+              page_ids(survey_id).map do |page_id|
+                Page.new(survey_id, page_id).questions
+              end.flatten
+            end
+
             # Returns surveys's collectors
             def collectors(survey_id, options = {})
                 response = self.class.get("/v3/surveys/#{survey_id}/collectors", query: options)

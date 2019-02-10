@@ -73,7 +73,7 @@ Request for getting list of surveys is #surveys.
     per_page - Count of objects rendered per page, optional
     page - Page ID, optional
 
-#### Responces
+#### Responses
 
 ```ruby
   {
@@ -128,7 +128,7 @@ Request for getting survey response's information is #response.
   client.response(survey_id, response_id)
 ```
 
-#### Responces
+#### Responses
 
 ```ruby
   {
@@ -161,7 +161,7 @@ Request for getting survey response's information in details is #response_with_d
   client.response_with_details(survey_id, response_id)
 ```
 
-#### Responces
+#### Responses
 
 ```ruby
   {
@@ -200,6 +200,19 @@ Request for getting survey response's information in details is #response_with_d
     "metadata"=>{}
   }
 ```
+
+### Survey pages
+
+Request for getting all the pages for a survey
+
+```ruby
+  client.pages survey_id
+```
+
+This returns an array of `SurveyMonkeyApi::Page` objects which have two methods:
+
+* `page_id` - the ID of the page in the SurveyMonkey API responses
+* `questions` - the questions assigned to this page.
 
 ## Contributing
 

@@ -7,6 +7,22 @@ module SurveyMonkeyApi
         @survey_id = survey_id
       end
 
+      def title
+        details unless @details
+        @details['headings'].map { |h| h['heading']}.join(', ')
+      end
+
+      def single_choice_responses
+        details unless @details
+        if @details['family'] == 'single_choice'
+          @details['answers']['choices'].map do |choice|
+            Struct.new(:id, :text).new(choice['id'], choice['text'])
+          end
+        else
+          []
+        end
+      end
+
       def details(options = {})
         unless @details
           response = Client.get("/v3/surveys/#{survey_id}/pages/#{page_id}/questions/#{question_id}", query: options)

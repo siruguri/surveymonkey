@@ -3,7 +3,7 @@ module SurveyMonkeyApi
       # API endpoints for surveys resources
 
       def initialize
-        @_pages = nil
+        @_pages = {}
       end
         module Surveys
             # Returns list of surveys as array in ['data'] field
@@ -28,13 +28,13 @@ module SurveyMonkeyApi
 
             # Returns surveys's pages
             def pages(survey_id, options = {})
-              return @_pages if @_pages
-              @_pages = []
-                response = self.class.get("/v3/surveys/#{survey_id}/pages", query: options)
-                response.parsed_response['data'].each do |page_details|
-                  @_pages << SurveyMonkeyApi::Page.new(survey_id, page_details['id'])
-                end
-                @_pages
+              return @_pages[survey_id] if @_pages[survey_id]
+              @_pages[survey_id] = []
+              response = self.class.get("/v3/surveys/#{survey_id}/pages", query: options)
+              response.parsed_response['data'].each do |page_details|
+                @_pages[survey_id] << SurveyMonkeyApi::Page.new(survey_id, page_details['id'])
+              end
+              @_pages[survey_id]
             end            
 
             def page_ids(survey_id)

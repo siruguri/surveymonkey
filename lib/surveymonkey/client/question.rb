@@ -12,6 +12,11 @@ module SurveyMonkeyApi
         @details['headings'].map { |h| h['heading']}.join(', ')
       end
 
+      def id
+        details unless @details
+        @details['id']
+      end
+
       def single_choice_responses
         details unless @details
         if @details['family'] == 'single_choice'

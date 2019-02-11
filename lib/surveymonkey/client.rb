@@ -18,6 +18,7 @@ module SurveyMonkeyApi
         attr_accessor :access_token
 
         def initialize(_args = {})
+          @_pages = {}
           access_token = ENV['SURVEY_MONKEY_TOKEN']
           self.class.default_options.merge!(headers:
                                               { 'Authorization' => "Bearer #{access_token}",

@@ -7,6 +7,11 @@ module SurveyMonkeyApi
         @survey_id = survey_id
       end
 
+      def to_json
+        details unless @details
+        @details.to_json
+      end
+      
       def title
         details unless @details
         @details['headings'].map { |h| h['heading']}.join(', ')

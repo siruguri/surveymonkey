@@ -24,6 +24,22 @@ module SurveyMonkeyApi
                                               { 'Authorization' => "Bearer #{access_token}",
                                                 'Content-Type' => 'application/json' }
                                            )
+          @api_limits = {}
+        end
+
+        def base_request(method, uri, query: )
+          response = self.class.send(method, uri, query: query)
+          @api_limits[:minute] = response.headers['x-ratelimit-app-global-minute-remaining']
+          @api_limits[:day] = response.headers['x-ratelimit-app-global-day-remaining']
+          response.parsed_response
+        end
+
+        def api_limit_minute
+          @api_limits[:minute]
+        end
+
+        def api_limit_day
+          @api_limits[:day]
         end
 
         def token=(token)

@@ -15,9 +15,14 @@ def webmock_stubs
   stub_request(:get, "https://api.surveymonkey.net/v3/surveys").
          with(
            headers: {
-       	  'Authorization'=>'Bearer thistoken'
+       	     'Authorization'=>'Bearer thistoken',
            }).
-         to_return(status: 200, body: surveys_response)
+         to_return(status: 200, body: surveys_response,
+                   headers: {
+                     'x-ratelimit-app-global-minute-remaining' => 20,
+                     'x-ratelimit-app-global-day-remaining' => 30
+                   }
+                  )
 end
 
 def pages_response

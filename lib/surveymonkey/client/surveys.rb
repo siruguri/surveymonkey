@@ -7,14 +7,12 @@ module SurveyMonkeyApi
       # Each survey looks like
       # {"href"=>"https://api.surveymonkey.net/v3/surveys/120053599", "nickname"=>"", "id"=>"120053599", "title"=>"Nyt"}
       def surveys(options = {})
-        response = self.class.get('/v3/surveys', query: options)
-        response.parsed_response
+        response = base_request :get, '/v3/surveys', query: options
       end
 
       # Returns surveys's information
       def survey(survey_id, options = {})
-        response = self.class.get("/v3/surveys/#{survey_id}", query: options)
-        response.parsed_response
+        base_request :get, "/v3/surveys/#{survey_id}", query: options
       end
 
       # Returns surveys's information with details

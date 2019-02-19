@@ -214,6 +214,20 @@ This returns an array of `SurveyMonkeyApi::Page` objects which have two methods:
 * `page_id` - the ID of the page in the SurveyMonkey API responses
 * `questions` - the questions assigned to this page.
 
+### Survey questions
+
+Request for getting all the questions for a survey
+
+```ruby
+  client.questions survey_id
+```
+
+This returns an array of `SurveyMonkeyApi::Question` objects which have two methods:
+
+* `id` - the ID of the question in the SurveyMonkey API responses
+* `title` - the question's title
+* `to_json` - the question's details rendered as a JSON string
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/WebGents/surveymonkey.

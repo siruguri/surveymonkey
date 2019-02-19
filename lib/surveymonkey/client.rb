@@ -15,13 +15,13 @@ module SurveyMonkeyApi
 
         base_uri 'https://api.surveymonkey.net'
         format :json
-        attr_accessor :access_token
-
-        def initialize(_args = {})
+        class << self
+          attr_reader :access_token
+        end
+        def initialize
           @_pages = {}
-          access_token = ENV['SURVEY_MONKEY_TOKEN']
           self.class.default_options.merge!(headers:
-                                              { 'Authorization' => "Bearer #{access_token}",
+                                              { 'Authorization' => "Bearer #{SurveyMonkeyApi::Client.access_token}",
                                                 'Content-Type' => 'application/json' }
                                            )
           @api_limits = {}
@@ -42,13 +42,9 @@ module SurveyMonkeyApi
           @api_limits[:day]
         end
 
-        def token=(token)
+        def self.token=(token)
           @access_token = token
-          self.class.default_options.merge!(headers: { 'Authorization' => "Bearer #{token}", })
-        end
-
-        def token
-          access_token
+          default_options.merge!(headers: { 'Authorization' => "Bearer #{token}", })
         end
     end
 end

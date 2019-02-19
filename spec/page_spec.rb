@@ -5,7 +5,7 @@ RSpec.describe SurveyMonkeyApi::Page do
   end
 
   it 'shows pages' do
-    @client.token = 'thistoken'
+    @client.class.token = 'thistoken'
     survey = @client.surveys['data'][0]
     # See WebMock stub
     expect(@client.pages(survey['id']).size).to eq(2)

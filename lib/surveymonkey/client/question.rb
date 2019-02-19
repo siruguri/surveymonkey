@@ -1,10 +1,14 @@
 module SurveyMonkeyApi
     class Question < Client
       attr_reader :question_id, :page_id, :survey_id
-      def initialize(id, page_id, survey_id)
+      def initialize(id = nil, page_id = nil, survey_id = nil)
         @question_id = id
         @page_id = page_id
         @survey_id = survey_id
+      end
+
+      def with_hash(hash)
+        @details = hash
       end
 
       def to_json

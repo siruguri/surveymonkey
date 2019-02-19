@@ -8,7 +8,7 @@ def webmock_stubs
   stub_request(:get, "https://api.surveymonkey.net/v3/surveys/1/collectors").
          with(
            headers: {
-       	  'Authorization'=>'Bearer',
+       	  'Authorization'=>'Bearer thistoken',
        	  'Content-Type'=>'application/json'
            }).
          to_return(status: 200, body: collectors_response)

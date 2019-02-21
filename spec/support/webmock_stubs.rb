@@ -1,18 +1,26 @@
 def webmock_stubs
-  stub_request(:get, "https://api.surveymonkey.net/v3/surveys/s_1234/pages").
+  stub_request(:post, "https://api.surveymonkey.com/v3/webhooks").
+         with(
+           body: "{\"object_type\":\"survey\",\"object_ids\":[123],\"name\":\"webhook for survey 123 0.6535895854646095\",\"event_type\":\"response_completed\",\"subscription_url\":\"http\"}",
+           headers: {
+       	  'Authorization'=>'Bearer thistoken'
+           }).
+         to_return(status: 200, body: webhook_body.to_json)
+
+  stub_request(:get, "https://api.surveymonkey.com/v3/surveys/s_1234/pages").
     with(
       headers: {
        	'Authorization'=>'Bearer thistoken'
       }).
     to_return(status: 200, body: pages_response)
-  stub_request(:get, "https://api.surveymonkey.net/v3/surveys/1/collectors").
+  stub_request(:get, "https://api.surveymonkey.com/v3/surveys/1/collectors").
          with(
            headers: {
        	  'Authorization'=>'Bearer thistoken',
        	  'Content-Type'=>'application/json'
            }).
          to_return(status: 200, body: collectors_response)
-  stub_request(:get, "https://api.surveymonkey.net/v3/surveys").
+  stub_request(:get, "https://api.surveymonkey.com/v3/surveys").
          with(
            headers: {
        	     'Authorization'=>'Bearer thistoken',
@@ -103,4 +111,16 @@ def collectors_response
   "redirect_type" => "url",
   "href": "https://api.surveymonkey.com/v3/collectors/1234"
   }.to_json
+end
+
+def webhook_body
+  {
+  "id" => "1234",
+  "name" => "My Webhook",
+  "event_type" => "response_completed",
+  "object_type" => "survey",
+  "object_ids" => ["1234", "5678"],
+  "subscription_url" => "https://surveymonkey.com/webhook_reciever",
+  "href" => "https://api.surveymonkey.com/v3/webhooks/123"
+  }
 end

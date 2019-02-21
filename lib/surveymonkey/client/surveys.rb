@@ -21,6 +21,18 @@ module SurveyMonkeyApi
         response.parsed_response
       end
 
+      # Adds a response_complete webhook to a survey
+      def webhook_response_complete(survey_id, url)
+        options = {
+          object_type: 'survey',
+          object_ids: [survey_id],
+          name: "webhook for survey #{survey_id} #{Random.new(1000).rand}",
+          event_type: "response_completed",
+          subscription_url: url
+        }
+        base_request :post, "/v3/webhooks", query: options, query_type: :body
+      end
+
       # Returns surveys's pages
       def pages(survey_id, options = {})
         return @_pages[survey_id] if @_pages[survey_id]

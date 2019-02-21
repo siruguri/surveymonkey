@@ -13,11 +13,16 @@ module SurveyMonkeyApi
         include SurveyMonkeyApi::Client::Surveys
         include SurveyMonkeyApi::Client::SurveyResponses
 
-        base_uri 'https://api.surveymonkey.net'
+        base_uri 'https://api.surveymonkey.com'
         format :json
         class << self
           attr_reader :access_token
+          def token=(token)
+            @access_token = token
+            default_options.merge!(headers: { 'Authorization' => "Bearer #{token}", })
+          end
         end
+
         def initialize
           @_pages = {}
           self.class.default_options.merge!(headers:
@@ -27,8 +32,12 @@ module SurveyMonkeyApi
           @api_limits = {}
         end
 
-        def base_request(method, uri, query: )
-          response = self.class.send(method, uri, query: query)
+        def base_request(method, uri, query: , query_type: :query)
+          response = if query_type == :query
+                       self.class.send(method, uri, query: query)
+                     else
+                       self.class.send(method, uri, body: query.to_json)
+                     end
           @api_limits[:minute] = response.headers['x-ratelimit-app-global-minute-remaining']
           @api_limits[:day] = response.headers['x-ratelimit-app-global-day-remaining']
           response.parsed_response
@@ -40,11 +49,6 @@ module SurveyMonkeyApi
 
         def api_limit_day
           @api_limits[:day]
-        end
-
-        def self.token=(token)
-          @access_token = token
-          default_options.merge!(headers: { 'Authorization' => "Bearer #{token}", })
         end
     end
 end

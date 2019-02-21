@@ -22,17 +22,13 @@ Or install it yourself as:
 
 ### Preparation
 
-Add this line to your application's ENV storage:
-
-```ruby
-SURVEY_MONKEY_TOKEN=your-token
-```
 
 ### Create SurveyMonkeyApi object
 
 ```ruby
   require 'surveymonkey'
   client = SurveyMonkeyApi::Client.new
+  client.class.token = 'YOURTOKEN'
 ```
 
 ### User information

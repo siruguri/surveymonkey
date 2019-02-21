@@ -19,7 +19,8 @@ module SurveyMonkeyApi
           attr_reader :access_token
           def token=(token)
             @access_token = token
-            default_options.merge!(headers: { 'Authorization' => "Bearer #{token}", })
+            h = default_options[:headers].merge({ 'Authorization' => "Bearer #{token}" })
+            default_options.merge!({headers: h})
           end
         end
 

@@ -1,4 +1,12 @@
 def webmock_stubs
+  stub_request(:get, /api.surveymonkey.com.v3.surveys.surveyid.responses.bulk/).
+         with(
+           headers: {
+       	  'Authorization'=>'Bearer',
+       	  'Content-Type'=>'application/json'
+           }).
+         to_return(status: 200, body: bulk_response)
+  
   stub_request(:post, "https://api.surveymonkey.com/v3/webhooks").
          with(
            body: "{\"object_type\":\"survey\",\"object_ids\":[123],\"name\":\"webhook for survey 123 0.6535895854646095\",\"event_type\":\"response_completed\",\"subscription_url\":\"http\"}",
@@ -122,5 +130,25 @@ def webhook_body
   "object_ids" => ["1234", "5678"],
   "subscription_url" => "https://surveymonkey.com/webhook_reciever",
   "href" => "https://api.surveymonkey.com/v3/webhooks/123"
+  }
+end
+
+def bulk_response
+  {
+    "per_page" => 20,
+    "total" => 100,
+    "data" => 20.times.map { |m| response },
+    "page" => 1,
+    "links" => {
+      "self" => "https://api.surveymonkey.com/v3/surveys/123456/responses/bulk?page=1&per_page=2"
+    }
+  }.to_json
+end
+
+def response
+  {
+    "total_time" => 0,
+    "collection_mode" => "default",
+    "href" => "https://api.surveymonkey.com/v3/responses/5007154325",
   }
 end

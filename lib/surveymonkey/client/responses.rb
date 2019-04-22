@@ -12,8 +12,8 @@ module SurveyMonkeyApi
 
             def responses_with_details(survey_id, options = {})
               url = "/v3/surveys/#{survey_id}/responses/bulk"
-                response = self.class.get(url, query: options)
-                first_response = response.parsed_response
+              first_response = base_request :get, url, query: options
+              
                 total = first_response['total']
                 per_page = first_response['per_page']
 

@@ -6,7 +6,9 @@ require_relative 'client/responses'
 require_relative 'client/question'
 
 module SurveyMonkeyApi
-    # Client class for api requests
+  # Client class for api requests
+  class ClientException < Exception
+  end
     class Client
         include HTTParty
         include SurveyMonkeyApi::Client::Users
@@ -42,6 +44,9 @@ module SurveyMonkeyApi
                      end
           @api_limits[:minute] = response.headers['x-ratelimit-app-global-minute-remaining']
           @api_limits[:day] = response.headers['x-ratelimit-app-global-day-remaining']
+          if !response['error'].nil?
+            raise ClientException.new response['error']['message']
+          end
           response.parsed_response
         end
 
